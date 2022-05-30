@@ -1,2 +1,7 @@
 ﻿  Main.cpp
+C:\Users\tomas\Desktop\Grafika\Grafika_Projekt\Main.cpp(51,1): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\tomas\Desktop\Grafika\Grafika_Projekt\Main.cpp(84,1): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\tomas\Desktop\Grafika\Grafika_Projekt\Main.cpp(120,19): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\tomas\Desktop\Grafika\Grafika_Projekt\Main.cpp(129,1): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\tomas\Desktop\Grafika\Grafika_Projekt\Main.cpp(162,1): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
   Grafika_Projekt.vcxproj -> C:\Users\tomas\Desktop\Grafika\Grafika_Projekt\x64\Debug\Grafika_Projekt.exe
