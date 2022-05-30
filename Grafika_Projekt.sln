@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32228.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Grafika_Projekt", "Grafika_Projekt.vcxproj", "{CB594BC3-E068-4BBA-9819-C577762FD04B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CB594BC3-E068-4BBA-9819-C577762FD04B}.Debug|x64.ActiveCfg = Debug|x64
+		{CB594BC3-E068-4BBA-9819-C577762FD04B}.Debug|x64.Build.0 = Debug|x64
+		{CB594BC3-E068-4BBA-9819-C577762FD04B}.Debug|x86.ActiveCfg = Debug|Win32
+		{CB594BC3-E068-4BBA-9819-C577762FD04B}.Debug|x86.Build.0 = Debug|Win32
+		{CB594BC3-E068-4BBA-9819-C577762FD04B}.Release|x64.ActiveCfg = Release|x64
+		{CB594BC3-E068-4BBA-9819-C577762FD04B}.Release|x64.Build.0 = Release|x64
+		{CB594BC3-E068-4BBA-9819-C577762FD04B}.Release|x86.ActiveCfg = Release|Win32
+		{CB594BC3-E068-4BBA-9819-C577762FD04B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4283EB4-0C33-4740-8128-14D8619A49DB}
+	EndGlobalSection
+EndGlobal
