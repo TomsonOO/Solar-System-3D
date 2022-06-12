@@ -1,5 +1,4 @@
 #define _USE_MATH_DEFINES
-
 #define GL_SILENCE_DEPRECATION
 
 #include <GL/glew.h>
@@ -27,14 +26,10 @@
 using namespace std;
 
 void timer(int);
-
-float lx = 0.0f, lz = -1.0f;// actual vector representing the camera's direction
-float x = 0.0f, z = 5.0f;// XZ position of the camera
-float y = 1.5f;
-float ly = 0.5f;
+float lx = 0.0f, lz = -1.0f, ly = 0.5f;// actual vector representing the camera's direction
+float x = 0.0f, z = 5.0f, y = 1.5f;// XZY position of the camera
 float red = 1.0f, blue = 1.0f, green = 1.0f;
-
-float angle = 0.0f;
+float angle = 0.0f;// angle for rotating triangle
 
 class Planet {
 public:
@@ -48,7 +43,6 @@ public:
 	}
 
 	void DrawSun(GLfloat x, GLfloat y, GLfloat z) {
-
 		glEnable(GL_COLOR_TABLE);
 
 		glColor4f(r, g, b, alpha);
@@ -62,14 +56,12 @@ public:
 	}
 
 	void DrawPlanet(GLfloat x, GLfloat y, GLfloat z) {
-
 		GLfloat DoublePi = 2.0f * M_PI;
 
 		GLfloat circleXYZ[3];
 		circleXYZ[0] = 0;
 		circleXYZ[1] = 0;
 		circleXYZ[2] = 0;
-
 
 		glBegin(GL_LINES); // orbit drawing
 		for (float i = 0.0f; i < DoublePi; i += 0.01) {
@@ -84,6 +76,7 @@ public:
 		glEnable(GL_COLOR_TABLE);
 
 		glColor4f(r, g, b, alpha);
+
 		glPushMatrix();
 		glTranslatef(x, y, z);
 		glutSolidSphere(radius, 30, 36);
@@ -92,14 +85,13 @@ public:
 		glDisable(GL_COLOR_TABLE);
 	}
 
-	void PlanetAnimation(GLfloat period, GLfloat time) {
+	void PlanetAnimation(GLfloat period, GLfloat time){
 		GLfloat w = (2.0f * M_PI) / period;
 		GLfloat x = orbit * cos(w * time);
 		GLfloat y = 0.0f;
 		GLfloat z = orbit * sin(w * time);
 		DrawPlanet(x, y, z);
 	}
-
 };
 Planet Sun(Sun_radius, 0, 0.98f, 0.84f, 0.11f);
 Planet Mercury(Mercury_radius, 0.9, 1.0f, 0.0f, 0.0f);
@@ -110,29 +102,98 @@ Planet Jupiter(Jupiter_radius, 2.2, 1.0f, 0.7f, 0.2f);
 Planet Saturn(Saturn_radius, 2.7, 1.0f, 0.0f, 0.2f);
 Planet Neptune(Neptun_radius, 3.2, 0.0f, 0.8f, 1.0f);
 
-void changeSize(int w, int h) {
+void changeSize(int w, int h){
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window of zero width).
 	if (h == 0)
 		h = 1;
 	float ratio = w * 1.0 / h;
-	glMatrixMode(GL_PROJECTION); // Use the Projection Matrix
-	glLoadIdentity();	// Reset Matrix
-	glViewport(0, 0, w, h);	// Set the viewport to be the entire window
-	gluPerspective(45.0f, ratio, 0.1f, 100.0f);	// Set the correct perspective.
-	glMatrixMode(GL_MODELVIEW);	// Get Back to the Modelview
+	glMatrixMode(GL_PROJECTION);// Use the Projection Matrix
+	glLoadIdentity();// Reset Matrix
+	glViewport(0, 0, w, h);// Set the viewport to be the entire window
+	gluPerspective(45.0f, ratio, 0.1f, 100.0f);// Set the correct perspective.
+	glMatrixMode(GL_MODELVIEW);// Get Back to the Modelview
 }
 
-void renderScene(void) {
+void renderScene(void){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear Color and Depth Buffers
 	GLfloat time = static_cast<GLfloat>(glutGet(GLUT_ELAPSED_TIME)) / 1000;
+	// Lighting set up - > needs refactoring
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT3);
+	glEnable(GL_LIGHT2);
+	glEnable(GL_LIGHT4);
+	glEnable(GL_LIGHT5);
+	glEnable(GL_LIGHT6);
+	glEnable(GL_LIGHT7);
 
-	// Reset transformations
-	glLoadIdentity();
+	// Set lighting intensity and color
+	GLfloat qaAmbientLight[] = { 0.1, 0.1, 0.1, 0.3 };
+	GLfloat qaDiffuseLight[] = { 0.35, 0.35, 0.35, 0.2f };
+	GLfloat qaSpecularLight[] = { 0.3, 0.3, 0.3, 0.3f };
+	glLightfv(GL_LIGHT1, GL_AMBIENT, qaAmbientLight);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, qaDiffuseLight);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, qaSpecularLight);
+	// Set the light position
+	GLfloat qaLightPosition1[] = { 0.9f, 0.0f, 0.0f, 1.0 };
+	glLightfv(GL_LIGHT1, GL_POSITION, qaLightPosition1);
+
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT2);
+	glLightfv(GL_LIGHT2, GL_AMBIENT, qaAmbientLight);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, qaDiffuseLight);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, qaSpecularLight);
+	// Set the light position
+	GLfloat qaLightPosition2[] = { -0.9f, 0.9f, 0.0f, 1.0 };
+	glLightfv(GL_LIGHT2, GL_POSITION, qaLightPosition2);
+
+	//
+	glLightfv(GL_LIGHT3, GL_AMBIENT, qaAmbientLight);
+	glLightfv(GL_LIGHT3, GL_DIFFUSE, qaDiffuseLight);
+	glLightfv(GL_LIGHT3, GL_SPECULAR, qaSpecularLight);
+	// Set the light position
+	GLfloat qaLightPosition3[] = { 0.0f, -0.9f, 0.9f, 1.0 };
+	glLightfv(GL_LIGHT3, GL_POSITION, qaLightPosition3);
+
+	glLightfv(GL_LIGHT4, GL_AMBIENT, qaAmbientLight);
+	glLightfv(GL_LIGHT4, GL_DIFFUSE, qaDiffuseLight);
+	glLightfv(GL_LIGHT4, GL_SPECULAR, qaSpecularLight);
+	// Set the light position
+	GLfloat qaLightPosition4[] = { 0.0f, 0.0f, -1.8f, 1.0 };
+	glLightfv(GL_LIGHT4, GL_POSITION, qaLightPosition4);
+
+	glLightfv(GL_LIGHT5, GL_AMBIENT, qaAmbientLight);
+	glLightfv(GL_LIGHT5, GL_DIFFUSE, qaDiffuseLight);
+	glLightfv(GL_LIGHT5, GL_SPECULAR, qaSpecularLight);
+	// Set the light position
+	GLfloat qaLightPosition5[] = { 0.0f, -0.9f, 0.9f, 1.0 };
+	glLightfv(GL_LIGHT5, GL_POSITION, qaLightPosition5);
+
+	glLightfv(GL_LIGHT6, GL_AMBIENT, qaAmbientLight);
+	glLightfv(GL_LIGHT6, GL_DIFFUSE, qaDiffuseLight);
+	glLightfv(GL_LIGHT6, GL_SPECULAR, qaSpecularLight);
+	// Set the light position
+	GLfloat qaLightPosition6[] = { -0.9f, 0.9f, 0.0f, 1.0 };
+	glLightfv(GL_LIGHT6, GL_POSITION, qaLightPosition6);
+
+	glLightfv(GL_LIGHT7, GL_AMBIENT, qaAmbientLight);
+	glLightfv(GL_LIGHT7, GL_DIFFUSE, qaDiffuseLight);
+	glLightfv(GL_LIGHT7, GL_SPECULAR, qaSpecularLight);
+	// Set the light position
+	GLfloat qaLightPosition7[] = { 1.2f, 0.9f, 0.5f, 1.0 };
+	glLightfv(GL_LIGHT7, GL_POSITION, qaLightPosition7);
+
+	
+	glLoadIdentity();// Reset transformations
 	// Set the camera
 	gluLookAt(x, y, z,
-		x + lx, y + ly - 0.5f, z + lz,
+		x + lx, y + ly -0.5f, z + lz,
 		0.0f, 0.1f, 0.0f);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
 
 	Sun.DrawSun(0.0, 0.0f, 0.0f);
 	Mercury.PlanetAnimation(8.8f, time);
@@ -145,22 +206,21 @@ void renderScene(void) {
 	glutSwapBuffers();
 }
 
-void processNormalKeys(unsigned char key, int x, int y) {
+void processNormalKeys(unsigned char key, int x, int y){
 	if (key == 27)
 		exit(0);
 }
 
-void processSpecialKeys(int key, int xx, int yy) {
-	// camera movement settings
-	float fraction = 0.4f;
+void processSpecialKeys(int key, int xx, int yy){
+	float fraction = 0.75f;
 	switch (key) {
 	case GLUT_KEY_LEFT:
-		angle -= 0.1f;
+		angle -= 0.4f;
 		lx = sin(angle);
 		lz = -cos(angle);
 		break;
 	case GLUT_KEY_RIGHT:
-		angle += 0.1f;
+		angle += 0.4f;
 		lx = sin(angle);
 		lz = -cos(angle);
 		break;
@@ -181,24 +241,21 @@ void processSpecialKeys(int key, int xx, int yy) {
 	}
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv){
 	// init GLUT and create window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(1000, 800);
 	glutCreateWindow("Solar System");
-
 	// register callbacks
 	glutDisplayFunc(renderScene);
 	glutReshapeFunc(changeSize);
 	glutIdleFunc(renderScene);
 	glutKeyboardFunc(processNormalKeys);
 	glutSpecialFunc(processSpecialKeys);
-
 	// OpenGL init
 	glEnable(GL_DEPTH_TEST);
-
 	// enter GLUT event processing cycle
 	glutMainLoop();
 
