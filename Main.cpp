@@ -92,6 +92,18 @@ public:
 		GLfloat z = orbit * sin(w * time);
 		DrawPlanet(x, y, z);
 	}
+	void PlanetAnimationWithMoon(GLfloat period, GLfloat time, Planet Moon, GLfloat moon_period){
+		GLfloat w = (2.0f * M_PI) / period;
+		GLfloat x_planet = orbit * cos(w * time);
+		GLfloat y = 0.0f;
+		GLfloat z_planet = orbit * sin(w * time);
+		DrawPlanet(x_planet, y, z_planet);
+
+		GLfloat w2 = (2.0f * M_PI) / moon_period;
+		GLfloat x_moon = x_planet + Moon.orbit * cos(w2 * time);
+		GLfloat z_moon = z_planet + Moon.orbit * sin(w2 * time);
+		Moon.DrawPlanet(x_moon, y, z_moon);
+	}
 };
 Planet Sun(Sun_radius, 0, 0.98f, 0.84f, 0.11f);
 Planet Mercury(Mercury_radius, 0.9, 1.0f, 0.0f, 0.0f);
@@ -101,6 +113,7 @@ Planet Mars(Mars_radius, 1.7, 1.0f, 0.5f, 0.0f);
 Planet Jupiter(Jupiter_radius, 2.2, 1.0f, 0.7f, 0.2f);
 Planet Saturn(Saturn_radius, 2.7, 1.0f, 0.0f, 0.2f);
 Planet Neptune(Neptun_radius, 3.2, 0.0f, 0.8f, 1.0f);
+Planet Moon(0.03, 0.2, 0.7f, 0.7f, 0.7f);
 
 void changeSize(int w, int h){
 	// Prevent a divide by zero, when window is too short
@@ -198,7 +211,7 @@ void renderScene(void){
 	Sun.DrawSun(0.0, 0.0f, 0.0f);
 	Mercury.PlanetAnimation(8.8f, time);
 	Venus.PlanetAnimation(22.465f, time);
-	Earth.PlanetAnimation(36.5, time);
+	Earth.PlanetAnimationWithMoon(36.5, time, Moon, 1);
 	Mars.PlanetAnimation(68.7, time);
 	Jupiter.PlanetAnimation(433, time);
 	Saturn.PlanetAnimation(1075.9, time);
